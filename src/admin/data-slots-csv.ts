@@ -1,0 +1,263 @@
+// Auto-generated from WeeklySlotsHomeDelivery_EN CSV — per-store per-zone schedules
+// Primary key: storeId + zoneName + serviceType
+// 564 slot entries across 3 LAD hubs, 35 zones
+
+interface ZoneSlot { start: string; end: string; capacity: number; label: string }
+type ZoneSchedule = Record<string, ZoneSlot[]>
+
+// Structure: REAL_ZONE_SLOTS[storeId][zoneName][day] = slots[]
+export const REAL_ZONE_SLOTS: Record<string, Record<string, ZoneSchedule>> = {
+  '4459': { // LAD WATERLOO MT-ST-JEAN
+    'Brussels_1.3': {
+      Monday: [{start:'15:00',end:'17:00',capacity:15,label:'Standard'}, {start:'16:00',end:'18:00',capacity:15,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}],
+      Tuesday: [{start:'08:00',end:'10:00',capacity:9,label:'Standard'}, {start:'09:00',end:'11:00',capacity:15,label:'Standard'}, {start:'10:00',end:'12:00',capacity:15,label:'Standard'}, {start:'11:00',end:'13:00',capacity:15,label:'Standard'}, {start:'12:00',end:'14:00',capacity:15,label:'Standard'}, {start:'15:00',end:'17:00',capacity:10,label:'Standard'}, {start:'16:00',end:'18:00',capacity:15,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}],
+      Wednesday: [{start:'08:00',end:'10:00',capacity:9,label:'Standard'}, {start:'09:00',end:'11:00',capacity:15,label:'Standard'}, {start:'10:00',end:'12:00',capacity:15,label:'Standard'}, {start:'11:00',end:'13:00',capacity:15,label:'Standard'}, {start:'12:00',end:'14:00',capacity:15,label:'Standard'}, {start:'15:00',end:'17:00',capacity:10,label:'Standard'}, {start:'16:00',end:'18:00',capacity:15,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}],
+      Thursday: [{start:'08:00',end:'10:00',capacity:8,label:'Standard'}, {start:'09:00',end:'11:00',capacity:15,label:'Standard'}, {start:'10:00',end:'12:00',capacity:15,label:'Standard'}, {start:'11:00',end:'13:00',capacity:15,label:'Standard'}, {start:'12:00',end:'14:00',capacity:15,label:'Standard'}, {start:'15:00',end:'17:00',capacity:15,label:'Standard'}, {start:'16:00',end:'18:00',capacity:15,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}],
+      Friday: [{start:'08:00',end:'10:00',capacity:0,label:'Standard'}, {start:'09:00',end:'11:00',capacity:0,label:'Standard'}, {start:'10:00',end:'12:00',capacity:0,label:'Standard'}, {start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'12:00',end:'14:00',capacity:0,label:'Standard'}, {start:'15:00',end:'17:00',capacity:0,label:'Standard'}, {start:'16:00',end:'18:00',capacity:0,label:'Standard'}, {start:'17:00',end:'19:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}, {start:'19:00',end:'21:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'08:00',end:'10:00',capacity:9,label:'Standard'}, {start:'09:00',end:'11:00',capacity:15,label:'Standard'}, {start:'10:00',end:'12:00',capacity:15,label:'Standard'}, {start:'11:00',end:'13:00',capacity:15,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'15:00',end:'17:00',capacity:15,label:'Standard'}, {start:'16:00',end:'18:00',capacity:15,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}],
+    },
+    'Hainaut': {
+      Tuesday: [{start:'17:00',end:'20:00',capacity:7,label:'Standard'}, {start:'18:00',end:'21:00',capacity:6,label:'Standard'}],
+      Thursday: [{start:'17:00',end:'20:00',capacity:7,label:'Standard'}, {start:'18:00',end:'21:00',capacity:9,label:'Standard'}],
+      Saturday: [{start:'09:00',end:'12:00',capacity:8,label:'Standard'}, {start:'10:00',end:'13:00',capacity:8,label:'Standard'}],
+    },
+    'Hainaut_1': {
+      Tuesday: [{start:'16:00',end:'19:00',capacity:6,label:'Standard'}],
+      Thursday: [{start:'16:00',end:'19:00',capacity:6,label:'Standard'}],
+      Saturday: [{start:'08:00',end:'11:00',capacity:7,label:'Standard'}],
+    },
+    'Mons': {
+      Monday: [{start:'17:00',end:'19:00',capacity:9,label:'Standard'}, {start:'18:00',end:'20:00',capacity:10,label:'Standard'}],
+      Tuesday: [{start:'11:00',end:'13:00',capacity:6,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:7,label:'Standard'}, {start:'18:00',end:'20:00',capacity:6,label:'Standard'}],
+      Wednesday: [{start:'11:00',end:'13:00',capacity:9,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:9,label:'Standard'}, {start:'18:00',end:'20:00',capacity:12,label:'Standard'}],
+      Thursday: [{start:'11:00',end:'13:00',capacity:6,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:8,label:'Standard'}, {start:'18:00',end:'20:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'12:00',end:'14:00',capacity:0,label:'Standard'}, {start:'17:00',end:'19:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'11:00',end:'13:00',capacity:8,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:8,label:'Standard'}, {start:'18:00',end:'20:00',capacity:6,label:'Standard'}],
+    },
+    'Mons_2': {
+      Monday: [{start:'19:00',end:'21:00',capacity:8,label:'Standard'}, {start:'20:00',end:'22:00',capacity:5,label:'Standard'}],
+      Tuesday: [{start:'13:00',end:'15:00',capacity:6,label:'Standard'}, {start:'14:00',end:'16:00',capacity:6,label:'Standard'}, {start:'19:00',end:'21:00',capacity:6,label:'Standard'}, {start:'20:00',end:'22:00',capacity:6,label:'Standard'}],
+      Wednesday: [{start:'13:00',end:'15:00',capacity:6,label:'Standard'}, {start:'14:00',end:'16:00',capacity:6,label:'Standard'}, {start:'19:00',end:'21:00',capacity:11,label:'Standard'}, {start:'20:00',end:'22:00',capacity:11,label:'Standard'}],
+      Thursday: [{start:'13:00',end:'15:00',capacity:6,label:'Standard'}, {start:'14:00',end:'16:00',capacity:6,label:'Standard'}, {start:'19:00',end:'21:00',capacity:6,label:'Standard'}, {start:'20:00',end:'22:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'13:00',end:'15:00',capacity:0,label:'Standard'}, {start:'14:00',end:'16:00',capacity:0,label:'Standard'}, {start:'19:00',end:'21:00',capacity:0,label:'Standard'}, {start:'20:00',end:'22:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'13:00',end:'15:00',capacity:6,label:'Standard'}, {start:'14:00',end:'16:00',capacity:6,label:'Standard'}, {start:'19:00',end:'21:00',capacity:7,label:'Standard'}, {start:'20:00',end:'22:00',capacity:6,label:'Standard'}],
+    },
+    'Mouscron': {
+      Tuesday: [{start:'18:00',end:'21:00',capacity:6,label:'Standard'}, {start:'19:00',end:'22:00',capacity:6,label:'Standard'}],
+      Thursday: [{start:'18:00',end:'21:00',capacity:5,label:'Standard'}, {start:'19:00',end:'22:00',capacity:8,label:'Standard'}],
+      Saturday: [{start:'11:00',end:'14:00',capacity:3,label:'Standard'}, {start:'12:00',end:'15:00',capacity:8,label:'Standard'}],
+    },
+    'NivellesTubize': {
+      Monday: [{start:'15:00',end:'18:00',capacity:8,label:'Standard'}, {start:'16:00',end:'19:00',capacity:6,label:'Standard'}],
+      Tuesday: [{start:'08:00',end:'11:00',capacity:6,label:'Standard'}, {start:'15:00',end:'18:00',capacity:7,label:'Standard'}, {start:'16:00',end:'19:00',capacity:6,label:'Standard'}],
+      Wednesday: [{start:'08:00',end:'11:00',capacity:6,label:'Standard'}, {start:'15:00',end:'18:00',capacity:8,label:'Standard'}, {start:'16:00',end:'19:00',capacity:8,label:'Standard'}],
+      Thursday: [{start:'08:00',end:'11:00',capacity:6,label:'Standard'}, {start:'15:00',end:'18:00',capacity:5,label:'Standard'}, {start:'16:00',end:'19:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'08:00',end:'11:00',capacity:0,label:'Standard'}, {start:'15:00',end:'18:00',capacity:0,label:'Standard'}, {start:'16:00',end:'19:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'08:00',end:'11:00',capacity:8,label:'Standard'}, {start:'15:00',end:'18:00',capacity:6,label:'Standard'}, {start:'16:00',end:'19:00',capacity:8,label:'Standard'}],
+    },
+    'Tournai': {
+      Tuesday: [{start:'18:00',end:'21:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'18:00',end:'21:00',capacity:7,label:'Standard'}],
+      Saturday: [{start:'12:00',end:'15:00',capacity:5,label:'Standard'}],
+    },
+    'Waterloo': {
+      Monday: [{start:'14:00',end:'17:00',capacity:8,label:'Standard'}, {start:'19:00',end:'22:00',capacity:6,label:'Standard'}],
+      Tuesday: [{start:'07:00',end:'10:00',capacity:6,label:'Standard'}, {start:'08:00',end:'11:00',capacity:8,label:'Standard'}, {start:'14:00',end:'17:00',capacity:7,label:'Standard'}, {start:'19:00',end:'22:00',capacity:6,label:'Standard'}],
+      Wednesday: [{start:'07:00',end:'10:00',capacity:6,label:'Standard'}, {start:'08:00',end:'11:00',capacity:7,label:'Standard'}, {start:'14:00',end:'17:00',capacity:7,label:'Standard'}, {start:'19:00',end:'22:00',capacity:11,label:'Standard'}],
+      Thursday: [{start:'07:00',end:'10:00',capacity:8,label:'Standard'}, {start:'08:00',end:'11:00',capacity:7,label:'Standard'}, {start:'14:00',end:'17:00',capacity:8,label:'Standard'}, {start:'19:00',end:'22:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'07:00',end:'10:00',capacity:0,label:'Standard'}, {start:'08:00',end:'11:00',capacity:0,label:'Standard'}, {start:'14:00',end:'17:00',capacity:0,label:'Standard'}, {start:'19:00',end:'22:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'07:00',end:'10:00',capacity:8,label:'Standard'}, {start:'08:00',end:'11:00',capacity:7,label:'Standard'}, {start:'14:00',end:'17:00',capacity:8,label:'Standard'}, {start:'19:00',end:'22:00',capacity:5,label:'Standard'}],
+    },
+  },
+  '4660': { // LAD BORSBEEK
+    'Antwerp_-1': {
+      Monday: [{start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Tuesday: [{start:'08:00',end:'10:00',capacity:5,label:'Standard'}, {start:'09:00',end:'11:00',capacity:2,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Wednesday: [{start:'08:00',end:'10:00',capacity:8,label:'Standard'}, {start:'09:00',end:'11:00',capacity:2,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Thursday: [{start:'08:00',end:'10:00',capacity:8,label:'Standard'}, {start:'09:00',end:'11:00',capacity:2,label:'Standard'}, {start:'15:00',end:'17:00',capacity:6,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Friday: [{start:'08:00',end:'10:00',capacity:0,label:'Standard'}, {start:'09:00',end:'11:00',capacity:0,label:'Standard'}, {start:'15:00',end:'17:00',capacity:0,label:'Standard'}, {start:'16:00',end:'18:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'08:00',end:'10:00',capacity:8,label:'Standard'}, {start:'09:00',end:'11:00',capacity:2,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+    },
+    'Antwerp_0': {
+      Monday: [{start:'19:00',end:'22:00',capacity:5,label:'Standard'}],
+      Wednesday: [{start:'12:00',end:'15:00',capacity:4,label:'Standard'}],
+      Friday: [{start:'12:00',end:'15:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'19:00',end:'22:00',capacity:5,label:'Standard'}],
+    },
+    'Antwerp_1': {
+      Monday: [{start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:5,label:'Standard'}],
+      Tuesday: [{start:'07:00',end:'10:00',capacity:7,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:8,label:'Standard'}],
+      Wednesday: [{start:'07:00',end:'10:00',capacity:8,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:6,label:'Standard'}],
+      Thursday: [{start:'07:00',end:'10:00',capacity:7,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Friday: [{start:'07:00',end:'10:00',capacity:0,label:'Standard'}, {start:'15:00',end:'17:00',capacity:0,label:'Standard'}, {start:'16:00',end:'18:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'07:00',end:'10:00',capacity:7,label:'Standard'}, {start:'15:00',end:'17:00',capacity:8,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+    },
+    'Antwerp_2': {
+      Monday: [{start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Tuesday: [{start:'11:00',end:'14:00',capacity:2,label:'Standard'}, {start:'15:00',end:'17:00',capacity:5,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Wednesday: [{start:'11:00',end:'14:00',capacity:9,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:8,label:'Standard'}],
+      Thursday: [{start:'11:00',end:'14:00',capacity:6,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'11:00',end:'14:00',capacity:0,label:'Standard'}, {start:'15:00',end:'17:00',capacity:0,label:'Standard'}, {start:'16:00',end:'18:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'11:00',end:'14:00',capacity:7,label:'Standard'}, {start:'15:00',end:'17:00',capacity:8,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+    },
+    'Bruges': {
+      Monday: [{start:'14:00',end:'16:00',capacity:6,label:'Standard'}, {start:'15:00',end:'17:00',capacity:5,label:'Standard'}],
+      Wednesday: [{start:'14:00',end:'16:00',capacity:5,label:'Standard'}, {start:'15:00',end:'17:00',capacity:5,label:'Standard'}],
+      Friday: [{start:'14:00',end:'16:00',capacity:0,label:'Standard'}, {start:'15:00',end:'17:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'09:00',end:'11:00',capacity:7,label:'Standard'}, {start:'10:00',end:'12:00',capacity:4,label:'Standard'}],
+    },
+    'Brussels_1': {
+      Monday: [{start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+      Tuesday: [{start:'11:00',end:'13:00',capacity:4,label:'Standard'}, {start:'12:00',end:'14:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+      Wednesday: [{start:'11:00',end:'13:00',capacity:3,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'11:00',end:'13:00',capacity:3,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:7,label:'Standard'}, {start:'18:00',end:'20:00',capacity:4,label:'Standard'}, {start:'19:00',end:'21:00',capacity:4,label:'Standard'}],
+      Friday: [{start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'12:00',end:'14:00',capacity:0,label:'Standard'}, {start:'17:00',end:'19:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}, {start:'19:00',end:'21:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'11:00',end:'13:00',capacity:3,label:'Standard'}, {start:'12:00',end:'14:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+    },
+    'Brussels_2': {
+      Monday: [{start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+      Tuesday: [{start:'10:00',end:'12:00',capacity:5,label:'Standard'}, {start:'11:00',end:'13:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+      Wednesday: [{start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'11:00',end:'13:00',capacity:4,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'11:00',end:'13:00',capacity:4,label:'Standard'}, {start:'18:00',end:'20:00',capacity:6,label:'Standard'}, {start:'19:00',end:'21:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'10:00',end:'12:00',capacity:0,label:'Standard'}, {start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}, {start:'19:00',end:'21:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'11:00',end:'13:00',capacity:4,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+    },
+    'Brussels_3': {
+      Monday: [{start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:10,label:'Standard'}, {start:'18:00',end:'20:00',capacity:4,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}],
+      Tuesday: [{start:'10:00',end:'12:00',capacity:9,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:10,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:16,label:'Standard'}, {start:'19:00',end:'21:00',capacity:16,label:'Standard'}, {start:'20:00',end:'22:00',capacity:7,label:'Standard'}],
+      Wednesday: [{start:'09:00',end:'11:00',capacity:8,label:'Standard'}, {start:'10:00',end:'12:00',capacity:9,label:'Standard'}, {start:'11:00',end:'13:00',capacity:8,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}, {start:'20:00',end:'22:00',capacity:8,label:'Standard'}],
+      Thursday: [{start:'09:00',end:'11:00',capacity:8,label:'Standard'}, {start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'11:00',end:'13:00',capacity:8,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}, {start:'20:00',end:'22:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'09:00',end:'11:00',capacity:0,label:'Standard'}, {start:'10:00',end:'12:00',capacity:0,label:'Standard'}, {start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'17:00',end:'19:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}, {start:'19:00',end:'21:00',capacity:0,label:'Standard'}, {start:'20:00',end:'22:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'09:00',end:'11:00',capacity:12,label:'Standard'}, {start:'10:00',end:'12:00',capacity:12,label:'Standard'}, {start:'11:00',end:'13:00',capacity:8,label:'Standard'}, {start:'16:00',end:'18:00',capacity:8,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}, {start:'18:00',end:'20:00',capacity:15,label:'Standard'}, {start:'19:00',end:'21:00',capacity:15,label:'Standard'}, {start:'20:00',end:'22:00',capacity:5,label:'Standard'}],
+    },
+    'Ghent_1': {
+      Tuesday: [{start:'11:00',end:'13:00',capacity:5,label:'Standard'}, {start:'12:00',end:'14:00',capacity:2,label:'Standard'}],
+      Wednesday: [{start:'11:00',end:'13:00',capacity:4,label:'Standard'}, {start:'12:00',end:'14:00',capacity:3,label:'Standard'}],
+      Thursday: [{start:'17:00',end:'19:00',capacity:3,label:'Standard'}, {start:'18:00',end:'20:00',capacity:4,label:'Standard'}, {start:'20:00',end:'22:00',capacity:5,label:'Standard'}],
+    },
+    'Ghent_3': {
+      Monday: [{start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}],
+      Tuesday: [{start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}],
+      Wednesday: [{start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:4,label:'Standard'}],
+      Thursday: [{start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'16:00',end:'18:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:4,label:'Standard'}],
+      Friday: [{start:'10:00',end:'12:00',capacity:0,label:'Standard'}, {start:'16:00',end:'18:00',capacity:0,label:'Standard'}, {start:'17:00',end:'19:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'09:00',end:'11:00',capacity:4,label:'Standard'}, {start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'17:00',end:'19:00',capacity:15,label:'Standard'}],
+    },
+    'Kortrijk': {
+      Tuesday: [{start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}, {start:'20:00',end:'22:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'11:00',end:'13:00',capacity:4,label:'Standard'}, {start:'12:00',end:'14:00',capacity:4,label:'Standard'}, {start:'13:00',end:'15:00',capacity:4,label:'Standard'}],
+      Friday: [{start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'12:00',end:'14:00',capacity:0,label:'Standard'}, {start:'13:00',end:'15:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'18:00',end:'20:00',capacity:4,label:'Standard'}, {start:'19:00',end:'21:00',capacity:5,label:'Standard'}, {start:'20:00',end:'22:00',capacity:7,label:'Standard'}],
+    },
+    'Kortrijk_1': {
+      Tuesday: [{start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'09:00',end:'11:00',capacity:8,label:'Standard'}, {start:'10:00',end:'12:00',capacity:4,label:'Standard'}, {start:'11:00',end:'13:00',capacity:4,label:'Standard'}],
+      Friday: [{start:'09:00',end:'11:00',capacity:0,label:'Standard'}, {start:'10:00',end:'12:00',capacity:0,label:'Standard'}, {start:'11:00',end:'13:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}],
+    },
+    'Kortrijk_3': {
+      Tuesday: [{start:'20:00',end:'22:00',capacity:8,label:'Standard'}],
+      Thursday: [{start:'14:00',end:'16:00',capacity:8,label:'Standard'}],
+      Friday: [{start:'14:00',end:'16:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'20:00',end:'22:00',capacity:8,label:'Standard'}],
+    },
+    'Leuven': {
+      Monday: [{start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:6,label:'Standard'}],
+      Tuesday: [{start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:6,label:'Standard'}],
+      Wednesday: [{start:'11:00',end:'13:00',capacity:5,label:'Standard'}, {start:'12:00',end:'14:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:6,label:'Standard'}],
+      Thursday: [{start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:6,label:'Standard'}, {start:'19:00',end:'21:00',capacity:7,label:'Standard'}],
+      Friday: [{start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'12:00',end:'14:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}, {start:'19:00',end:'21:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'11:00',end:'14:00',capacity:7,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}, {start:'19:00',end:'21:00',capacity:7,label:'Standard'}],
+    },
+    'St_Niklaas': {
+      Monday: [{start:'14:00',end:'17:00',capacity:8,label:'Standard'}],
+      Tuesday: [{start:'08:00',end:'11:00',capacity:6,label:'Standard'}, {start:'14:00',end:'17:00',capacity:8,label:'Standard'}],
+      Wednesday: [{start:'08:00',end:'11:00',capacity:7,label:'Standard'}, {start:'14:00',end:'17:00',capacity:8,label:'Standard'}],
+      Thursday: [{start:'08:00',end:'11:00',capacity:8,label:'Standard'}, {start:'14:00',end:'17:00',capacity:8,label:'Standard'}],
+      Friday: [{start:'08:00',end:'11:00',capacity:0,label:'Standard'}, {start:'14:00',end:'17:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'08:00',end:'11:00',capacity:8,label:'Standard'}, {start:'14:00',end:'17:00',capacity:8,label:'Standard'}],
+    },
+    'Turnhout': {
+      Tuesday: [{start:'12:00',end:'15:00',capacity:8,label:'Standard'}],
+      Wednesday: [{start:'12:00',end:'15:00',capacity:8,label:'Standard'}],
+      Thursday: [{start:'19:00',end:'22:00',capacity:8,label:'Standard'}],
+      Friday: [{start:'19:00',end:'22:00',capacity:0,label:'Standard'}],
+    },
+    'West_Flanders': {
+      Monday: [{start:'15:00',end:'17:00',capacity:9,label:'Standard'}, {start:'16:00',end:'18:00',capacity:9,label:'Standard'}],
+      Wednesday: [{start:'15:00',end:'17:00',capacity:6,label:'Standard'}, {start:'16:00',end:'18:00',capacity:7,label:'Standard'}],
+      Friday: [{start:'15:00',end:'17:00',capacity:0,label:'Standard'}, {start:'16:00',end:'18:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'10:00',end:'12:00',capacity:5,label:'Standard'}, {start:'11:00',end:'13:00',capacity:5,label:'Standard'}],
+    },
+    'West_Flanders_2': {
+      Monday: [{start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:7,label:'Standard'}],
+      Wednesday: [{start:'17:00',end:'19:00',capacity:7,label:'Standard'}, {start:'18:00',end:'20:00',capacity:11,label:'Standard'}],
+      Friday: [{start:'17:00',end:'19:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'12:00',end:'14:00',capacity:4,label:'Standard'}, {start:'13:00',end:'15:00',capacity:4,label:'Standard'}],
+    },
+  },
+  '4661': { // LAD HERSTAL
+    'Charleroi': {
+      Monday: [{start:'16:00',end:'18:00',capacity:7,label:'Standard'}, {start:'17:00',end:'19:00',capacity:7,label:'Standard'}],
+      Tuesday: [{start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:8,label:'Standard'}, {start:'17:00',end:'19:00',capacity:8,label:'Standard'}],
+      Wednesday: [{start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:10,label:'Standard'}],
+      Thursday: [{start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:10,label:'Standard'}],
+      Friday: [{start:'16:00',end:'18:00',capacity:0,label:'Standard'}, {start:'17:00',end:'19:00',capacity:0,label:'Standard'}, {start:'09:00',end:'11:00',capacity:0,label:'Standard'}, {start:'10:00',end:'12:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:10,label:'Standard'}],
+    },
+    'Charleroi_2': {
+      Monday: [{start:'18:00',end:'20:00',capacity:7,label:'Standard'}, {start:'19:00',end:'21:00',capacity:12,label:'Standard'}],
+      Tuesday: [{start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:10,label:'Standard'}, {start:'19:00',end:'21:00',capacity:9,label:'Standard'}],
+      Wednesday: [{start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:7,label:'Standard'}, {start:'18:00',end:'20:00',capacity:10,label:'Standard'}, {start:'19:00',end:'21:00',capacity:9,label:'Standard'}],
+      Thursday: [{start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:7,label:'Standard'}, {start:'18:00',end:'20:00',capacity:6,label:'Standard'}, {start:'19:00',end:'21:00',capacity:10,label:'Standard'}],
+      Friday: [{start:'10:00',end:'12:00',capacity:0,label:'Standard'}, {start:'11:00',end:'13:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}, {start:'19:00',end:'21:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:7,label:'Standard'}, {start:'18:00',end:'20:00',capacity:9,label:'Standard'}, {start:'19:00',end:'21:00',capacity:9,label:'Standard'}],
+    },
+    'Eupen': {
+      Tuesday: [{start:'15:00',end:'18:00',capacity:12,label:'Standard'}],
+      Friday: [{start:'15:00',end:'17:00',capacity:0,label:'Standard'}],
+    },
+    'Eupen_2': {
+      Tuesday: [{start:'16:00',end:'19:00',capacity:13,label:'Standard'}],
+      Friday: [{start:'16:00',end:'18:00',capacity:0,label:'Standard'}],
+    },
+    'Hasselt_2': {
+      Monday: [{start:'18:00',end:'21:00',capacity:7,label:'Standard'}],
+      Tuesday: [{start:'11:00',end:'14:00',capacity:7,label:'Standard'}, {start:'18:00',end:'21:00',capacity:10,label:'Standard'}],
+      Wednesday: [{start:'11:00',end:'14:00',capacity:10,label:'Standard'}, {start:'18:00',end:'21:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'11:00',end:'14:00',capacity:7,label:'Standard'}, {start:'18:00',end:'21:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'18:00',end:'21:00',capacity:0,label:'Standard'}, {start:'11:00',end:'14:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'11:00',end:'14:00',capacity:7,label:'Standard'}, {start:'18:00',end:'21:00',capacity:5,label:'Standard'}],
+    },
+    'Hasselt_2.2': {
+      Monday: [{start:'19:00',end:'22:00',capacity:7,label:'Standard'}],
+      Tuesday: [{start:'12:00',end:'15:00',capacity:5,label:'Standard'}, {start:'19:00',end:'22:00',capacity:10,label:'Standard'}],
+      Wednesday: [{start:'12:00',end:'15:00',capacity:11,label:'Standard'}, {start:'19:00',end:'22:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'12:00',end:'15:00',capacity:7,label:'Standard'}, {start:'19:00',end:'22:00',capacity:6,label:'Standard'}],
+      Friday: [{start:'12:00',end:'15:00',capacity:0,label:'Standard'}, {start:'19:00',end:'22:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'12:00',end:'15:00',capacity:7,label:'Standard'}, {start:'19:00',end:'22:00',capacity:5,label:'Standard'}],
+    },
+    'Liege_2': {
+      Monday: [{start:'14:00',end:'17:00',capacity:5,label:'Standard'}, {start:'15:00',end:'17:00',capacity:5,label:'Standard'}, {start:'16:00',end:'18:00',capacity:10,label:'Standard'}, {start:'17:00',end:'19:00',capacity:10,label:'Standard'}, {start:'18:00',end:'20:00',capacity:10,label:'Standard'}],
+      Tuesday: [{start:'08:00',end:'10:00',capacity:7,label:'Standard'}, {start:'09:00',end:'11:00',capacity:7,label:'Standard'}, {start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:7,label:'Standard'}, {start:'14:00',end:'16:00',capacity:8,label:'Standard'}, {start:'15:00',end:'17:00',capacity:7,label:'Standard'}, {start:'16:00',end:'18:00',capacity:6,label:'Standard'}, {start:'17:00',end:'19:00',capacity:10,label:'Standard'}, {start:'18:00',end:'20:00',capacity:9,label:'Standard'}],
+      Wednesday: [{start:'08:00',end:'10:00',capacity:7,label:'Standard'}, {start:'09:00',end:'11:00',capacity:7,label:'Standard'}, {start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:7,label:'Standard'}, {start:'14:00',end:'16:00',capacity:5,label:'Standard'}, {start:'15:00',end:'17:00',capacity:5,label:'Standard'}, {start:'16:00',end:'18:00',capacity:5,label:'Standard'}, {start:'17:00',end:'19:00',capacity:5,label:'Standard'}, {start:'18:00',end:'20:00',capacity:5,label:'Standard'}],
+      Thursday: [{start:'08:00',end:'10:00',capacity:7,label:'Standard'}, {start:'09:00',end:'11:00',capacity:7,label:'Standard'}, {start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:7,label:'Standard'}, {start:'14:00',end:'16:00',capacity:4,label:'Standard'}, {start:'15:00',end:'17:00',capacity:5,label:'Standard'}, {start:'16:00',end:'18:00',capacity:12,label:'Standard'}, {start:'17:00',end:'19:00',capacity:10,label:'Standard'}, {start:'18:00',end:'20:00',capacity:10,label:'Standard'}],
+      Friday: [{start:'14:00',end:'16:00',capacity:0,label:'Standard'}, {start:'15:00',end:'17:00',capacity:0,label:'Standard'}, {start:'16:00',end:'18:00',capacity:0,label:'Standard'}, {start:'17:00',end:'19:00',capacity:0,label:'Standard'}, {start:'18:00',end:'20:00',capacity:0,label:'Standard'}, {start:'07:00',end:'10:00',capacity:0,label:'Standard'}, {start:'08:00',end:'10:00',capacity:0,label:'Standard'}, {start:'09:00',end:'11:00',capacity:0,label:'Standard'}, {start:'11:00',end:'14:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'14:00',end:'16:00',capacity:5,label:'Standard'}, {start:'15:00',end:'17:00',capacity:4,label:'Standard'}, {start:'16:00',end:'18:00',capacity:4,label:'Standard'}, {start:'08:00',end:'10:00',capacity:7,label:'Standard'}, {start:'09:00',end:'11:00',capacity:7,label:'Standard'}, {start:'10:00',end:'12:00',capacity:7,label:'Standard'}, {start:'11:00',end:'13:00',capacity:7,label:'Standard'}, {start:'12:00',end:'14:00',capacity:7,label:'Standard'}, {start:'17:00',end:'19:00',capacity:8,label:'Standard'}, {start:'18:00',end:'20:00',capacity:8,label:'Standard'}],
+    },
+    'Namur': {
+      Monday: [{start:'14:00',end:'17:00',capacity:7,label:'Standard'}, {start:'15:00',end:'18:00',capacity:7,label:'Standard'}],
+      Tuesday: [{start:'08:00',end:'11:00',capacity:5,label:'Standard'}, {start:'09:00',end:'12:00',capacity:7,label:'Standard'}, {start:'14:00',end:'17:00',capacity:6,label:'Standard'}, {start:'15:00',end:'18:00',capacity:8,label:'Standard'}],
+      Wednesday: [{start:'08:00',end:'11:00',capacity:7,label:'Standard'}, {start:'09:00',end:'12:00',capacity:7,label:'Standard'}, {start:'14:00',end:'17:00',capacity:4,label:'Standard'}, {start:'15:00',end:'18:00',capacity:6,label:'Standard'}],
+      Thursday: [{start:'08:00',end:'11:00',capacity:7,label:'Standard'}, {start:'09:00',end:'12:00',capacity:7,label:'Standard'}, {start:'14:00',end:'17:00',capacity:4,label:'Standard'}, {start:'15:00',end:'18:00',capacity:7,label:'Standard'}],
+      Friday: [{start:'14:00',end:'17:00',capacity:0,label:'Standard'}, {start:'15:00',end:'18:00',capacity:0,label:'Standard'}, {start:'08:00',end:'10:00',capacity:0,label:'Standard'}, {start:'09:00',end:'11:00',capacity:0,label:'Standard'}],
+      Saturday: [{start:'14:00',end:'17:00',capacity:5,label:'Standard'}, {start:'15:00',end:'18:00',capacity:5,label:'Standard'}, {start:'08:00',end:'11:00',capacity:7,label:'Standard'}, {start:'09:00',end:'12:00',capacity:7,label:'Standard'}],
+    },
+  },
+};
+
+export const STORE_ZONES: Record<string, { name: string; zones: string[] }> = {
+  '4459': { name: 'LAD WATERLOO MT-ST-JEAN', zones: ["Brussels_1.3", "Hainaut", "Hainaut_1", "Mons", "Mons_2", "Mouscron", "NivellesTubize", "Tournai", "Waterloo"] },
+  '4660': { name: 'LAD BORSBEEK', zones: ["Antwerp_-1", "Antwerp_0", "Antwerp_1", "Antwerp_2", "Bruges", "Brussels_1", "Brussels_2", "Brussels_3", "Ghent_1", "Ghent_3", "Kortrijk", "Kortrijk_1", "Kortrijk_3", "Leuven", "St_Niklaas", "Turnhout", "West_Flanders", "West_Flanders_2"] },
+  '4661': { name: 'LAD HERSTAL', zones: ["Charleroi", "Charleroi_2", "Eupen", "Eupen_2", "Hasselt_2", "Hasselt_2.2", "Liege_2", "Namur"] },
+};

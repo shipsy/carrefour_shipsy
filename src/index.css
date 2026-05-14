@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cf-blue: #004E9F;
+  --color-cf-red: #E2001A;
+  --color-cf-dark: #003876;
+  --color-cf-light: #F7F8FA;
+  --color-cf-border: #E6E8EC;
+  --color-cf-green: #00A651;
+  --color-cf-yellow: #FFD500;
+  --color-cf-warning: #E2A400;
+  --color-cf-pink: #FFE9EC;
+  --color-cf-success: #0F8F4A;
+  --color-cf-muted: #6B7280;
+  --color-cf-text: #1B2330;
+  --color-cf-card: #ffffff;
+  --color-cf-bg: #F7F8FA;
+
+  --color-shipsy-blue: #002B49;
+  --color-shipsy-orange: #FF6B00;
+  --color-shipsy-green: #10B981;
+  --color-shipsy-purple: #5D5FEF;
+
+  --color-slot-ok: #10B981;
+  --color-slot-filling: #F59E0B;
+  --color-slot-full: #EF4444;
+  --color-slot-eco: #059669;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+body { @apply bg-white text-gray-900 antialiased m-0; font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; }
+#root { @apply min-h-screen flex flex-col; }
+
+@keyframes pulse-ring {
+  0%   { transform: translate(-50%,50%) scale(.4); opacity: 1; }
+  100% { transform: translate(-50%,50%) scale(1.4); opacity: 0; }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 1.6s ease-out infinite;
+}
+
+/* Shipsy Admin — Slider Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1659CB;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1659CB;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  cursor: pointer;
+}
