@@ -40,9 +40,17 @@ export interface SlotRaw {
 
 export type DayOfWeekCheckout = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
 
+// Business line ↔ delivery method mapping (same concept, different naming)
+// Admin uses: LAD, Drive, FastDelivery
+// Checkout uses: home, fast, collect
+// YieldConfig accepts both key formats
+export type BusinessLine = 'LAD' | 'Drive' | 'FastDelivery';
+export const BL_TO_METHOD: Record<string, DeliveryMethod> = { LAD: 'home', Drive: 'collect', FastDelivery: 'fast' };
+export const METHOD_TO_BL: Record<string, BusinessLine> = { home: 'LAD', collect: 'Drive', fast: 'FastDelivery' };
+
 export interface YieldConfig {
-  baseFees: Record<DeliveryMethod, number>;
-  floorPrices: Record<DeliveryMethod, number>;
+  baseFees: Record<string, number>;
+  floorPrices: Record<string, number>;
   surgeThreshold: number;
   surgeFlatAmount: number;
   greenDiscountPct: number;

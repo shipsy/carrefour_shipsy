@@ -91,16 +91,22 @@ export function loadYieldConfig(storeId?: string): YieldConfig {
     }
     if (!stored) return result;
 
-    // Only override non-zero values from stored config
+    // Override non-zero values — accept both delivery method (home/fast/collect) and business line (LAD/FastDelivery/Drive) keys
     if (stored.baseFees) {
       if (stored.baseFees.home > 0) result.baseFees.home = stored.baseFees.home;
+      else if (stored.baseFees.LAD > 0) result.baseFees.home = stored.baseFees.LAD;
       if (stored.baseFees.fast > 0) result.baseFees.fast = stored.baseFees.fast;
+      else if (stored.baseFees.FastDelivery > 0) result.baseFees.fast = stored.baseFees.FastDelivery;
       if (stored.baseFees.collect > 0) result.baseFees.collect = stored.baseFees.collect;
+      else if (stored.baseFees.Drive > 0) result.baseFees.collect = stored.baseFees.Drive;
     }
     if (stored.floorPrices) {
       if (stored.floorPrices.home > 0) result.floorPrices.home = stored.floorPrices.home;
+      else if (stored.floorPrices.LAD > 0) result.floorPrices.home = stored.floorPrices.LAD;
       if (stored.floorPrices.fast > 0) result.floorPrices.fast = stored.floorPrices.fast;
-      if (stored.floorPrices.collect >= 0) result.floorPrices.collect = stored.floorPrices.collect;
+      else if (stored.floorPrices.FastDelivery > 0) result.floorPrices.fast = stored.floorPrices.FastDelivery;
+      if (stored.floorPrices.collect >= 0 && stored.floorPrices.collect !== undefined) result.floorPrices.collect = stored.floorPrices.collect;
+      else if (stored.floorPrices.Drive >= 0 && stored.floorPrices.Drive !== undefined) result.floorPrices.collect = stored.floorPrices.Drive;
     }
     if (stored.surgeThreshold > 0) result.surgeThreshold = stored.surgeThreshold;
     if (stored.surgeFlatAmount > 0) result.surgeFlatAmount = stored.surgeFlatAmount;

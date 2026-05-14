@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Drawer, Tooltip, Badge as AntBadge, Avatar, Dropdown } from 'antd';
+import { Tooltip, Badge as AntBadge, Avatar, Dropdown } from 'antd';
 import {
   CalendarOutlined, LineChartOutlined, EnvironmentOutlined,
   ShopOutlined, TeamOutlined, ScheduleOutlined,
@@ -23,30 +23,35 @@ import ABTesting from './pages/ABTesting';
 import SystemConfig from './pages/SystemConfig';
 import AuditLog from './pages/AuditLog';
 
-const NAVBAR_H = 44;
+const NAVBAR_H = 52;
 const TABBAR_H = 40;
-const LEFT_W = 220;
-const RIGHT_W = 240;
+const LEFT_W = 230;
+const RIGHT_W = 250;
 
 const C = {
-  navbar: '#1B2638',
-  drawerLeft: '#2B3A52',
-  drawerLeftActive: '#4B7BEC',
-  drawerLeftHover: 'rgba(255,255,255,0.06)',
-  drawerRight: '#FFFFFF',
-  drawerRightActiveBg: '#EBF1FC',
-  drawerRightActiveBorder: '#4B7BEC',
-  drawerRightActiveText: '#4B7BEC',
-  drawerRightText: '#444',
-  drawerRightIcon: '#AAA',
-  drawerRightHover: '#F5F7FA',
-  tabBg: '#FAFBFC',
-  tabBorder: '#E5E7EB',
+  // Shipsy's warm off-white base
+  navbar: '#0F1E37',
+  drawerLeft: '#162236',
+  drawerLeftActive: '#1A2D4A',
+  drawerLeftActiveBorder: '#4B7BEC',
+  drawerLeftHover: 'rgba(255,255,255,0.04)',
+  drawerRight: '#1A2D4A',
+  drawerRightActiveBg: '#3B6DE8',
+  drawerRightActiveBorder: '#3B6DE8',
+  drawerRightActiveText: '#fff',
+  drawerRightText: 'rgba(255,255,255,0.8)',
+  drawerRightIcon: '#C4A97D',
+  drawerRightHover: 'rgba(255,255,255,0.05)',
+  iconTan: '#C4A97D',
+  tabBg: '#F5F4F2',        // Shipsy warm off-white
+  tabBorder: '#E8E5DF',
   tabActive: '#006EC3',
   tabMuted: '#777',
   tabText: '#333',
   primary: '#006EC3',
-  pageBg: '#FFF',
+  pageBg: '#F5F4F2',       // Shipsy warm base
+  cardBg: '#FFFFFF',        // Cards stay white on warm bg
+  headerBg: '#F4F9FA',     // Section headers
   font: "'Inter', -apple-system, sans-serif",
 };
 
@@ -304,86 +309,96 @@ export default function AdminConsole() {
         })}
       </div>
 
-      {/* ═══ DRAWER — starts from TOP (y=0), goes full height, sits UNDER navbar ═══ */}
-      <Drawer
-        open={open}
-        onClose={() => setOpen(false)}
-        placement="left"
-        width={LEFT_W + RIGHT_W}
-        closable={false}
-        mask={true}
-        maskStyle={{ background: 'rgba(0,0,0,0.3)' }}
-        rootStyle={{ top: 0 }}
-        rootClassName="shipsy-sidenav"
-        zIndex={1000}
-        styles={{
-          wrapper: { top: NAVBAR_H, height: `calc(100vh - ${NAVBAR_H}px)` },
-          body: { padding: 0, display: 'flex', height: '100%' },
-        }}
-      >
-        {/* Left panel */}
-        <div style={{
-          width: LEFT_W, background: C.drawerLeft,
-          display: 'flex', flexDirection: 'column', height: '100%',
-        }}>
-          <div style={{ flex: 1, paddingTop: 2 }}>
-            {nav.map(g => {
-              const a = grp === g.key;
-              return (
-                <button key={g.key} onClick={() => pickGrp(g.key)} style={{
-                  width: '100%', height: 42, display: 'flex', alignItems: 'center',
-                  gap: 12, padding: '0 20px', border: 'none', cursor: 'pointer',
-                  background: a ? C.drawerLeftActive : 'transparent',
-                  color: '#fff', fontSize: 12.5, fontWeight: 600,
-                  fontFamily: C.font, textAlign: 'left', transition: 'background 0.12s',
-                }}
-                  onMouseEnter={e => { if (!a) e.currentTarget.style.background = C.drawerLeftHover; }}
-                  onMouseLeave={e => { if (!a) e.currentTarget.style.background = a ? C.drawerLeftActive : 'transparent'; }}
-                >
-                  <span style={{ fontSize: 15, display: 'flex', width: 20, justifyContent: 'center', color: a ? '#fff' : 'rgba(255,255,255,0.4)' }}>{g.icon}</span>
-                  {g.label}
-                </button>
-              );
-            })}
-          </div>
-          <div style={{ padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', fontSize: 10, color: 'rgba(255,255,255,0.3)' }}>
-            Press CTRL + K to search
-          </div>
-        </div>
+      {/* ═══ FULL-HEIGHT SIDE DRAWER (matching Shipsy CRM) ═══ */}
+      {open && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000 }}
+          onClick={() => setOpen(false)}>
+          {/* Dark overlay — only to the right of the drawer */}
+          <div style={{ position: 'absolute', top: NAVBAR_H, left: LEFT_W + RIGHT_W, right: 0, bottom: 0, background: 'rgba(0,0,0,0.35)' }} />
 
-        {/* Right panel */}
-        <div style={{
-          width: RIGHT_W, background: C.drawerRight,
-          display: 'flex', flexDirection: 'column', height: '100%',
-        }}>
-          <div style={{ flex: 1, paddingTop: 2 }}>
-            {curGrp?.children.map(ch => {
-              const a = page === ch.key;
-              return (
-                <button key={ch.key} onClick={() => pickPage(ch.key)} style={{
-                  width: '100%', height: 42, display: 'flex', alignItems: 'center',
-                  gap: 12, padding: '0 20px', border: 'none', cursor: 'pointer',
-                  background: a ? C.drawerRightActiveBg : 'transparent',
-                  color: a ? C.drawerRightActiveText : C.drawerRightText,
-                  fontSize: 12.5, fontWeight: a ? 600 : 400,
-                  fontFamily: C.font, textAlign: 'left',
-                  borderLeft: a ? `3px solid ${C.drawerRightActiveBorder}` : '3px solid transparent',
-                  transition: 'background 0.1s',
-                }}
-                  onMouseEnter={e => { if (!a) e.currentTarget.style.background = C.drawerRightHover; }}
-                  onMouseLeave={e => { if (!a) e.currentTarget.style.background = a ? C.drawerRightActiveBg : 'transparent'; }}
-                >
-                  <span style={{ fontSize: 14, display: 'flex', width: 20, justifyContent: 'center', color: a ? C.drawerRightActiveText : C.drawerRightIcon }}>{ch.icon}</span>
-                  {ch.label}
-                </button>
-              );
-            })}
+          {/* Two-panel drawer */}
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              position: 'absolute',
+              top: NAVBAR_H,
+              left: 0,
+              bottom: 0,
+              display: 'flex',
+              width: LEFT_W + RIGHT_W,
+              boxShadow: '4px 0 20px rgba(0,0,0,0.15)',
+            }}
+          >
+            {/* Left panel — dark navy, full height */}
+            <div style={{
+              width: LEFT_W, background: C.drawerLeft,
+              display: 'flex', flexDirection: 'column',
+              borderRight: '1px solid rgba(255,255,255,0.1)',
+              overflowY: 'auto',
+            }}>
+              <div style={{ flex: 1, paddingTop: 6 }}>
+                {nav.map(g => {
+                  const a = grp === g.key;
+                  return (
+                    <button key={g.key} onClick={() => pickGrp(g.key)} style={{
+                      width: '100%', height: 54, display: 'flex', alignItems: 'center',
+                      gap: 16, padding: '0 24px', border: 'none', cursor: 'pointer',
+                      background: a ? C.drawerLeftActive : 'transparent',
+                      borderLeft: a ? `4px solid ${C.drawerLeftActiveBorder}` : '4px solid transparent',
+                      color: a ? '#fff' : 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: a ? 600 : 500,
+                      fontFamily: C.font, textAlign: 'left', transition: 'background 0.12s',
+                    }}
+                      onMouseEnter={e => { if (!a) e.currentTarget.style.background = C.drawerLeftHover; }}
+                      onMouseLeave={e => { if (!a) e.currentTarget.style.background = a ? C.drawerLeftActive : 'transparent'; }}
+                    >
+                      <span style={{ fontSize: 18, display: 'flex', width: 24, justifyContent: 'center', color: a ? '#fff' : C.iconTan }}>{g.icon}</span>
+                      {g.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <div style={{ padding: '14px 22px', borderTop: '1px solid rgba(255,255,255,0.08)', fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>
+                Press CTRL + K to search
+              </div>
+            </div>
+
+            {/* Right panel — light/warm bg, full height, scrollable */}
+            <div style={{
+              width: RIGHT_W, background: C.drawerRight,
+              display: 'flex', flexDirection: 'column',
+              overflowY: 'auto',
+              borderRight: '1px solid #E8E5DF',
+            }}>
+              <div style={{ paddingTop: 6 }}>
+                {curGrp?.children.map(ch => {
+                  const a = page === ch.key;
+                  return (
+                    <button key={ch.key} onClick={() => pickPage(ch.key)} style={{
+                      width: '100%', height: 50, display: 'flex', alignItems: 'center',
+                      gap: 16, padding: '0 24px', border: 'none', cursor: 'pointer',
+                      background: a ? C.drawerRightActiveBg : 'transparent',
+                      color: a ? '#fff' : C.drawerRightText,
+                      fontSize: 14, fontWeight: a ? 600 : 400,
+                      fontFamily: C.font, textAlign: 'left',
+                      borderLeft: 'none',
+                      transition: 'background 0.1s',
+                    }}
+                      onMouseEnter={e => { if (!a) e.currentTarget.style.background = C.drawerRightHover; }}
+                      onMouseLeave={e => { if (!a) e.currentTarget.style.background = a ? C.drawerRightActiveBg : 'transparent'; }}
+                    >
+                      <span style={{ fontSize: 17, display: 'flex', width: 24, justifyContent: 'center', color: a ? '#fff' : C.iconTan }}>{ch.icon}</span>
+                      {ch.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-      </Drawer>
+      )}
 
       {/* ═══ CONTENT ═══ */}
-      <div style={{ paddingTop: NAVBAR_H + TABBAR_H, minHeight: '100vh' }}>
+      <div style={{ paddingTop: NAVBAR_H + TABBAR_H, minHeight: '100vh', background: C.pageBg }}>
         <div style={{ padding: '18px 22px', maxWidth: 1440 }}>
           <Page tab={page} />
         </div>
@@ -391,8 +406,9 @@ export default function AdminConsole() {
 
       <style>{`
         .ant-badge-count { background: #E8A230 !important; box-shadow: none !important; font-weight: 700 !important; font-size: 9px !important; }
-        .shipsy-sidenav .ant-drawer-body { background: ${C.drawerLeft} !important; }
-        .shipsy-sidenav .ant-drawer-content-wrapper { box-shadow: 4px 0 16px rgba(0,0,0,0.12) !important; }
+        .ant-table-thead > tr > th { background: ${C.headerBg} !important; }
+        .ant-card { background: ${C.cardBg} !important; }
+        .ant-tabs-nav { background: ${C.cardBg} !important; }
       `}</style>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { SlotRaw, YieldConfig, YieldResult, DeliveryMethod } from '../types';
+import { METHOD_TO_BL } from '../types';
 
 // Click & Collect has dedicated time-of-day fees (from Sharvani's integration)
 const CLICK_COLLECT_FEES_BY_TOD: Record<SlotRaw['timeOfDay'], number> = {
@@ -22,12 +23,13 @@ export function calculateDeliveryFee(
   // Click & Collect: if admin hasn't set a base fee, use ToD-based default as base
   // This ensures C&C goes through the full yield engine (surge, DoW, ToD all apply)
 
-  // For C&C: use ToD-based default if admin base fee is 0
-  const rawBase = config.baseFees[deliveryMethod];
+  // Resolve fee using either delivery method key (home/fast/collect) or business line key (LAD/FastDelivery/Drive)
+  const bl = METHOD_TO_BL[deliveryMethod]; // e.g. home → LAD
+  const rawBase = config.baseFees[deliveryMethod] ?? config.baseFees[bl] ?? 0;
   const baseFee = (deliveryMethod === 'collect' && rawBase === 0)
     ? CLICK_COLLECT_FEES_BY_TOD[slot.timeOfDay]
     : rawBase;
-  const rawFloor = config.floorPrices[deliveryMethod];
+  const rawFloor = config.floorPrices[deliveryMethod] ?? config.floorPrices[bl] ?? 0;
   const floorPrice = (deliveryMethod === 'collect' && rawFloor === 0)
     ? CLICK_COLLECT_FEES_BY_TOD[slot.timeOfDay] * 0.5
     : rawFloor;

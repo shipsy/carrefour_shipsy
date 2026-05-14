@@ -25,7 +25,7 @@ interface PricingRule {
 }
 interface YieldRecord {
   configId: string; storeId: string; storeName: string;
-  businessLine: string; serviceType: string; version: number; isActive: boolean;
+  businessLine: string; version: number; isActive: boolean;
   basePricing: { baseFee: number; floorPrice: number; currency: string };
   multipliers: {
     timeOfDay: Record<string, number>;
@@ -47,11 +47,7 @@ const BL_OPTIONS = [
   { label: 'Drive (Click & Collect)', value: 'Drive' },
   { label: 'Fast Delivery', value: 'FastDelivery' },
 ];
-const SERVICE_OPTIONS = [
-  { label: 'Home', value: 'home' },
-  { label: 'Drive', value: 'drive' },
-  { label: 'Express', value: 'express' },
-];
+
 const CONDITION_TYPES = [
   { value: 'segment', label: 'Segment' }, { value: 'promo_code', label: 'Promo Code' },
   { value: 'green_slot', label: 'Green Slot' }, { value: 'capacity_above', label: 'Capacity Above' },
@@ -188,7 +184,7 @@ function makeRecord(store: typeof adminStores[0], bl: string, st: string): Yield
   return {
     configId: `yield-${store.id}-${st}-${(++_idCounter).toString(36)}`,
     storeId: store.id, storeName: store.name,
-    businessLine: bl, serviceType: st, version: 1, isActive: true,
+    businessLine: bl, version: 1, isActive: true,
     basePricing: { baseFee: vary(p.base), floorPrice: vary(p.floor), currency: 'EUR' },
     multipliers: {
       timeOfDay: { ...(TOD_BY_BL[st] || TOD_BY_BL.home) },
@@ -249,22 +245,23 @@ function syncStoreToCheckout(configs: YieldRecord[]) {
   if (!configs.length) return;
   const storeId = configs[0].storeId;
 
-  // Build merged baseFees/floorPrices from all business line configs
-  const baseFees = { home: 0, fast: 0, collect: 0 };
-  const floorPrices = { home: 0, fast: 0, collect: 0 };
+  // Build merged baseFees/floorPrices keyed by BOTH business line and delivery method
+  const baseFees: Record<string, number> = { home: 0, fast: 0, collect: 0, LAD: 0, FastDelivery: 0, Drive: 0 };
+  const floorPrices: Record<string, number> = { home: 0, fast: 0, collect: 0, LAD: 0, FastDelivery: 0, Drive: 0 };
   let surgeThreshold = 80, surgeFlatAmount = 2, greenDiscountPct = 25, maxDemandFactor = 0.6;
   let todWeights = { morning: 0.85, afternoon: 1.0, evening: 1.4 };
   let dowWeights = { Monday: 0.9, Tuesday: 0.85, Wednesday: 0.9, Thursday: 1.0, Friday: 1.15, Saturday: 1.3, Sunday: 0.7 };
   let psychRounding = true;
 
-  const blToKey: Record<string, 'home' | 'fast' | 'collect'> = { LAD: 'home', FastDelivery: 'fast', Drive: 'collect' };
+  const blToMethod: Record<string, string> = { LAD: 'home', FastDelivery: 'fast', Drive: 'collect' };
 
   configs.forEach(rec => {
-    const key = blToKey[rec.businessLine];
-    if (key) {
-      baseFees[key] = rec.basePricing.baseFee;
-      floorPrices[key] = rec.basePricing.floorPrice;
-    }
+    const method = blToMethod[rec.businessLine] || 'home';
+    // Write under both keys so yield engine finds it either way
+    baseFees[method] = rec.basePricing.baseFee;
+    baseFees[rec.businessLine] = rec.basePricing.baseFee;
+    floorPrices[method] = rec.basePricing.floorPrice;
+    floorPrices[rec.businessLine] = rec.basePricing.floorPrice;
     // Use LAD (home) config as the primary for shared settings
     if (rec.businessLine === 'LAD') {
       surgeThreshold = rec.surge.tiers[0]?.capacityAbovePct ?? 80;
@@ -296,19 +293,21 @@ function syncStoreToCheckout(configs: YieldRecord[]) {
   }, storeId);
 }
 
-// Single-record sync (for backward compat) — rebuilds full store config
+// Single-record sync — writes both BL and method keys
 function syncToCheckout(rec: YieldRecord) {
-  // Just write the single record's store - will be called for each BL on init
-  const blToKey: Record<string, 'home' | 'fast' | 'collect'> = { LAD: 'home', FastDelivery: 'fast', Drive: 'collect' };
-  const key = blToKey[rec.businessLine] || 'home';
+  const blToMethod2: Record<string, string> = { LAD: 'home', FastDelivery: 'fast', Drive: 'collect' };
+  const key = blToMethod2[rec.businessLine] || 'home';
 
   // Read existing config from localStorage, merge this BL's pricing in
   try {
     const existing = JSON.parse(localStorage.getItem(`shipsy_admin_yield_config_${rec.storeId}`) || '{}');
-    const baseFees = existing.baseFees || { home: 0, fast: 0, collect: 0 };
-    const floorPrices = existing.floorPrices || { home: 0, fast: 0, collect: 0 };
+    const baseFees = existing.baseFees || { home: 0, fast: 0, collect: 0, LAD: 0, FastDelivery: 0, Drive: 0 };
+    const floorPrices = existing.floorPrices || { home: 0, fast: 0, collect: 0, LAD: 0, FastDelivery: 0, Drive: 0 };
+    // Write under both delivery method AND business line keys
     baseFees[key] = rec.basePricing.baseFee;
+    baseFees[rec.businessLine] = rec.basePricing.baseFee;
     floorPrices[key] = rec.basePricing.floorPrice;
+    floorPrices[rec.businessLine] = rec.basePricing.floorPrice;
 
     saveYieldConfig({
       baseFees, floorPrices,
@@ -340,11 +339,11 @@ function syncToCheckout(rec: YieldRecord) {
 
 // ── CSV helpers ──────────────────────────────────────────────
 
-const CSV_COLUMNS = ['Store ID', 'Store Name', 'Business Line', 'Service Type', 'Base Fee', 'Floor Price', 'Currency', 'Green Discount %', 'Surge Threshold %', 'Surge Amount', 'Morning Multiplier', 'Afternoon Multiplier', 'Evening Multiplier'];
+const CSV_COLUMNS = ['Store ID', 'Store Name', 'Business Line', 'Base Fee', 'Floor Price', 'Currency', 'Green Discount %', 'Surge Threshold %', 'Surge Amount', 'Morning Multiplier', 'Afternoon Multiplier', 'Evening Multiplier'];
 
 const csvColumnMapping: Record<string, string> = {
   'Store ID': 'storeId', 'Store Name': 'storeName', 'Business Line': 'businessLine',
-  'Service Type': 'serviceType', 'Base Fee': 'baseFee', 'Floor Price': 'floorPrice',
+  'Base Fee': 'baseFee', 'Floor Price': 'floorPrice',
   'Currency': 'currency', 'Green Discount %': 'greenDiscountPct',
   'Surge Threshold %': 'surgeThreshold', 'Surge Amount': 'surgeAmount',
   'Morning Multiplier': 'todMorning', 'Afternoon Multiplier': 'todAfternoon', 'Evening Multiplier': 'todEvening',
@@ -360,18 +359,18 @@ function parseCsvToRecords(text: string): YieldRecord[] {
     const row: Record<string, string> = {};
     mapped.forEach((h, i) => { row[h] = vals[i] || ''; });
     const storeId = row.storeId || `csv-${idx}`;
-    const st = row.serviceType || 'home';
-    return makeRecord({ id: storeId, name: row.storeName || storeId, businessLines: [row.businessLine || 'LAD'] } as any, row.businessLine || 'LAD', st);
+
+    return makeRecord({ id: storeId, name: row.storeName || storeId, businessLines: [row.businessLine || 'LAD'] } as any, row.businessLine || 'LAD', '');
   });
 }
 
 function generateSampleCsv(): string {
-  return [CSV_COLUMNS.join(','), '4660,LAD Borsbeek,LAD,home,5.99,1.99,EUR,25,75,1.00,0.85,1.00,1.40', '4661,LAD Herstal,LAD,home,6.49,2.49,EUR,20,80,2.00,0.90,1.00,1.35'].join('\n');
+  return [CSV_COLUMNS.join(','), '4660,LAD Borsbeek,LAD,5.99,1.99,EUR,25,75,1.00,0.85,1.00,1.40', '4661,LAD Herstal,LAD,6.49,2.49,EUR,20,80,2.00,0.90,1.00,1.35'].join('\n');
 }
 
 // ── Store Type Badge ─────────────────────────────────────────
 
-const typeColors: Record<string, string> = { LAD_Hub: '#6B21A8', Hypermarket: '#004E9A', Market: '#389E0D', Express: '#D46B08' };
+
 
 
 // ══════════════════════════════════════════════════════════════
@@ -380,14 +379,16 @@ const typeColors: Record<string, string> = { LAD_Hub: '#6B21A8', Hypermarket: '#
 
 export default function YieldManagement() {
   const [entities] = useState<StoreEntity[]>(() => {
-    const built = buildStoreEntities();
-    // Sync ALL seed configs to localStorage on first load so checkout can read them
-    built.forEach(store => {
-      if (store.configs.length > 0) {
-        syncStoreToCheckout(store.configs);
-      }
-    });
-    return built;
+    try {
+      const built = buildStoreEntities();
+      built.forEach(store => {
+        try { if (store.configs.length > 0) syncStoreToCheckout(store.configs); } catch { /* ignore sync errors */ }
+      });
+      return built;
+    } catch (e) {
+      console.error('[YieldManagement] Init error:', e);
+      return [];
+    }
   });
   const [sidebarSearch, setSidebarSearch] = useState('');
   const [selectedStoreIdx, setSelectedStoreIdx] = useState(0);
@@ -396,6 +397,12 @@ export default function YieldManagement() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [editingConfig, setEditingConfig] = useState<YieldRecord | null>(null);
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
+  const [globalAddOpen, setGlobalAddOpen] = useState(false);
+
+  // Inline filters for rate card table
+  const [filterZone, setFilterZone] = useState('');
+  const [filterCurrency, setFilterCurrency] = useState('');
+  const [filterSegment, setFilterSegment] = useState('');
 
   // Filtered sidebar
   const filteredEntities = sidebarSearch
@@ -411,12 +418,23 @@ export default function YieldManagement() {
     }
   }, [selectedStoreIdx, selectedStore?.id]);
 
-  // Active configs for selected store + business line
-  const activeConfigs = selectedStore?.configs.filter(c => c.businessLine === activeBlTab) || [];
+  // Active configs for selected store + business line + inline filters
+  const activeConfigs = (selectedStore?.configs.filter(c => c.businessLine === activeBlTab) || []).filter(c => {
+    if (filterZone && !c.configId.toLowerCase().includes(filterZone.toLowerCase())) return false;
+    if (filterCurrency && c.basePricing.currency !== filterCurrency) return false;
+    if (filterSegment) {
+      const seg = c.segmentPricing.find(s => s.segment === filterSegment);
+      if (!seg) return false;
+    }
+    return true;
+  });
+
+  const hasFilters = !!(filterZone || filterCurrency || filterSegment);
+  const resetFilters = () => { setFilterZone(''); setFilterCurrency(''); setFilterSegment(''); };
 
   // Handlers
   const handleEdit = (r: YieldRecord) => { setEditingConfig(r); setDrawerVisible(true); };
-  const handleAdd = () => { setEditingConfig(null); setDrawerVisible(true); };
+  const handleAdd = () => { setEditingConfig(null); setGlobalAddOpen(false); setDrawerVisible(true); };
   const handleDelete = (r: YieldRecord) => {
     const idx = selectedStore.configs.findIndex(c => c.configId === r.configId);
     if (idx >= 0) selectedStore.configs.splice(idx, 1);
@@ -464,7 +482,18 @@ export default function YieldManagement() {
   // ══════════════════════════════════════════════════════════
 
   return (
-    <div style={{ display: 'flex', height: 'calc(100vh - 160px)', background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid #E8E8E8' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 160px)', background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid #E8E8E8' }}>
+
+      {/* ═══ GLOBAL ADD BAR ═══ */}
+      <div style={{ padding: '10px 16px', borderBottom: '1px solid #E8E8E8', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FAFBFC', flexShrink: 0 }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#333' }}>Rate Card Configurations</span>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditingConfig(null); setGlobalAddOpen(true); setDrawerVisible(true); }}
+          style={{ background: '#1659CB', borderColor: '#1659CB' }}>
+          Add New Rate Card
+        </Button>
+      </div>
+
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
       {/* ═══ LEFT SIDEBAR — Store Entity Cards ═══ */}
       {!sidebarCollapsed && (
@@ -495,11 +524,8 @@ export default function YieldManagement() {
                   }}
                 >
                   <div style={{ fontWeight: 600, fontSize: 13, color: '#1B2330', marginBottom: 4 }}>{store.name}</div>
-                  <div style={{ fontSize: 11, color: '#999', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                    <span style={{ background: typeColors[store.type] || '#666', color: '#fff', padding: '1px 6px', borderRadius: 3, fontSize: 9, fontWeight: 600 }}>
-                      {store.type}
-                    </span>
-                    <span>{store.configs.length} configs</span>
+                  <div style={{ fontSize: 11, color: '#999' }}>
+                    {store.configs.length} configs
                   </div>
                 </div>
               );
@@ -566,6 +592,32 @@ export default function YieldManagement() {
           </button>
         </div>
 
+        {/* Inline filters (matching CRM Allocation Masters pattern) */}
+        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', borderBottom: '1px solid #E8E8E8', background: '#FAFBFC' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 12, color: '#666', whiteSpace: 'nowrap' }}>zone :</span>
+            <Input size="small" placeholder="zone..." value={filterZone} onChange={e => setFilterZone(e.target.value)}
+              style={{ width: 120, borderRadius: 4 }} allowClear />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 12, color: '#666', whiteSpace: 'nowrap' }}>currency :</span>
+            <Select size="small" placeholder="currency..." value={filterCurrency || undefined} onChange={v => setFilterCurrency(v || '')}
+              style={{ width: 100 }} allowClear
+              options={[{ value: 'EUR', label: 'EUR' }, { value: 'USD', label: 'USD' }, { value: 'GBP', label: 'GBP' }]} />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 12, color: '#666', whiteSpace: 'nowrap' }}>segment :</span>
+            <Select size="small" placeholder="segment..." value={filterSegment || undefined} onChange={v => setFilterSegment(v || '')}
+              style={{ width: 110 }} allowClear
+              options={[{ value: 'standard', label: 'standard' }, { value: 'plus', label: 'plus' }, { value: 'premium', label: 'premium' }, { value: 'vip', label: 'vip' }]} />
+          </div>
+          {hasFilters && (
+            <span onClick={resetFilters} style={{ fontSize: 13, color: '#D40B00', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              Reset All
+            </span>
+          )}
+        </div>
+
         {/* Rate card table */}
         <div style={{ flex: 1, overflow: 'auto' }}>
           <Table
@@ -575,7 +627,7 @@ export default function YieldManagement() {
             size="small"
             pagination={false}
             rowSelection={{ type: 'checkbox' }}
-            scroll={{ y: 'calc(100vh - 340px)' }}
+            scroll={{ y: 'calc(100vh - 400px)' }}
           />
           {activeConfigs.length === 0 && (
             <div style={{ textAlign: 'center', padding: 40, color: '#999' }}>
@@ -585,15 +637,16 @@ export default function YieldManagement() {
         </div>
       </div>
 
+      </div>{/* close flex row */}
+
       {/* ═══ FORM DRAWER ═══ */}
       <YieldFormDrawer
         visible={drawerVisible}
         editData={editingConfig}
-        storeId={selectedStore?.id}
-        storeName={selectedStore?.name}
-        serviceType={activeBlTab === 'LAD' ? 'home' : activeBlTab === 'FastDelivery' ? 'fast' : 'collect'}
-        businessLine={activeBlTab}
-        onClose={() => { setDrawerVisible(false); setEditingConfig(null); }}
+        storeId={globalAddOpen ? '' : (selectedStore?.id || '')}
+        storeName={globalAddOpen ? '' : (selectedStore?.name || '')}
+        businessLine={globalAddOpen ? '' : activeBlTab}
+        onClose={() => { setDrawerVisible(false); setEditingConfig(null); setGlobalAddOpen(false); }}
         onSave={(rec) => {
           const store = entities.find(e => e.id === rec.storeId);
           if (store) {
@@ -601,7 +654,7 @@ export default function YieldManagement() {
             if (idx >= 0) store.configs[idx] = rec; else store.configs.push(rec);
           }
           syncToCheckout(rec);
-          setDrawerVisible(false); setEditingConfig(null);
+          setDrawerVisible(false); setEditingConfig(null); setGlobalAddOpen(false);
           message.success('Config saved — checkout synced');
         }}
       />
@@ -664,7 +717,7 @@ function BulkUploadModal({ open, onClose, onUpload }: { open: boolean; onClose: 
       </Button>
       {error && <div style={{ color: '#D40B00', fontSize: 12, marginBottom: 8 }}>{error}</div>}
       {preview.length > 0 && <Table size="small" pagination={false} scroll={{ y: 140 }} dataSource={preview.map((r, i) => ({ ...r, key: i }))}
-        columns={[{ title: 'Store', dataIndex: 'storeName', width: 140 }, { title: 'BL', dataIndex: 'businessLine', width: 70 }, { title: 'Service', dataIndex: 'serviceType', width: 70 },
+        columns={[{ title: 'Store', dataIndex: 'storeName', width: 140 }, { title: 'BL', dataIndex: 'businessLine', width: 100 },
           { title: 'Base', key: 'b', width: 70, render: (_: any, r: YieldRecord) => `€${r.basePricing.baseFee.toFixed(2)}` }]} />}
     </Modal>
   );
@@ -674,8 +727,8 @@ function BulkUploadModal({ open, onClose, onUpload }: { open: boolean; onClose: 
 // FORM DRAWER (7 tabs)
 // ══════════════════════════════════════════════════════════════
 
-function YieldFormDrawer({ visible, editData, storeId, storeName, serviceType, businessLine, onClose, onSave }: {
-  visible: boolean; editData: YieldRecord | null; storeId: string; storeName: string; serviceType: string; businessLine?: string;
+function YieldFormDrawer({ visible, editData, storeId, storeName, businessLine, onClose, onSave }: {
+  visible: boolean; editData: YieldRecord | null; storeId: string; storeName: string; businessLine?: string;
   onClose: () => void; onSave: (rec: YieldRecord) => void;
 }) {
   const [form] = Form.useForm();
@@ -695,7 +748,7 @@ function YieldFormDrawer({ visible, editData, storeId, storeName, serviceType, b
     if (editData) {
       form.setFieldsValue({
         storeId: editData.storeId, storeName: editData.storeName, businessLine: editData.businessLine,
-        serviceType: editData.serviceType, version: editData.version, isActive: editData.isActive,
+        version: editData.version, isActive: editData.isActive,
         baseFee: editData.basePricing.baseFee, floorPrice: editData.basePricing.floorPrice, currency: editData.basePricing.currency,
         todMorning: editData.multipliers.timeOfDay.morning, todAfternoon: editData.multipliers.timeOfDay.afternoon, todEvening: editData.multipliers.timeOfDay.evening,
         ...Object.fromEntries(DOW_KEYS.map(d => [`dow${d}`, editData.multipliers.dayOfWeek[d]])),
@@ -709,7 +762,7 @@ function YieldFormDrawer({ visible, editData, storeId, storeName, serviceType, b
     } else {
       form.resetFields();
       form.setFieldsValue({
-        storeId, storeName, serviceType, businessLine: businessLine || 'LAD', currency: 'EUR', baseFee: 5.99, floorPrice: 1.99,
+        storeId, storeName, businessLine: businessLine || 'LAD', currency: 'EUR', baseFee: 5.99, floorPrice: 1.99,
         version: 1, isActive: true, todMorning: 0.85, todAfternoon: 1.0, todEvening: 1.4,
         ...Object.fromEntries(DOW_KEYS.map(d => [`dow${d}`, { Monday: 0.9, Tuesday: 0.85, Wednesday: 0.9, Thursday: 1.0, Friday: 1.15, Saturday: 1.3, Sunday: 0.7 }[d]])),
         demandEnabled: true, demandMaxFactor: 0.6, demandFormula: 'linear', surgeEnabled: true,
@@ -720,13 +773,13 @@ function YieldFormDrawer({ visible, editData, storeId, storeName, serviceType, b
       setGreenCriteria(['Vehicle already in neighborhood', 'Off-peak window', 'Electric vehicle route']);
       setRules([{ priority: 1, name: 'VIP Free Delivery', type: 'exclusive', condition: { type: 'segment', value: 'vip' }, action: { type: 'set_price', value: 0 }, active: true }, { priority: 99, name: 'Floor Price', type: 'exclusive', condition: { type: 'always', value: true }, action: { type: 'enforce_floor', value: 1.99 }, active: true }]);
     }
-  }, [visible, editData, form, storeId, storeName, serviceType]);
+  }, [visible, editData, form, storeId, storeName]);
 
   const handleSave = async () => {
     const v = await form.validateFields();
-    const configId = editData ? editData.configId : `yield-${v.storeId}-${v.serviceType}-${Date.now().toString(36)}`;
+    const configId = editData ? editData.configId : `yield-${v.storeId}-${v.businessLine}-${Date.now().toString(36)}`;
     const rec: YieldRecord = {
-      configId, storeId: v.storeId, storeName: v.storeName, businessLine: v.businessLine, serviceType: v.serviceType,
+      configId, storeId: v.storeId, storeName: v.storeName, businessLine: v.businessLine,
       version: v.version || 1, isActive: v.isActive ?? true,
       basePricing: { baseFee: v.baseFee, floorPrice: v.floorPrice, currency: v.currency },
       multipliers: { timeOfDay: { morning: v.todMorning, afternoon: v.todAfternoon, evening: v.todEvening }, dayOfWeek: Object.fromEntries(DOW_KEYS.map(d => [d, v[`dow${d}`]])), demand: { enabled: v.demandEnabled, maxFactor: v.demandMaxFactor, formula: v.demandFormula } },
@@ -752,10 +805,31 @@ function YieldFormDrawer({ visible, editData, storeId, storeName, serviceType, b
   const tabItems = [
     { key: 'general', label: 'General', children: (
       <>
-        <Form.Item name="storeId" label={<strong>Store ID</strong>}><Input disabled /></Form.Item>
+        <Form.Item name="storeId" label={<strong>Store ID</strong>}>
+          {/* Global add (no storeId pre-filled) → searchable dropdown */}
+          {/* Store-level add or edit → locked input */}
+          {!editData && !storeId ? (
+            <Select
+              showSearch
+              placeholder="Type to search store..."
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase()) ||
+                (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={adminStores.map(s => ({ value: s.id, label: `${s.id} — ${s.name}` }))}
+              onChange={(val) => {
+                const store = adminStores.find(s => s.id === val);
+                if (store) {
+                  form.setFieldsValue({ storeId: store.id, storeName: store.name });
+                }
+              }}
+            />
+          ) : (
+            <Input disabled />
+          )}
+        </Form.Item>
         <Form.Item name="storeName" label={<strong>Store Name</strong>}><Input disabled /></Form.Item>
         <Form.Item name="businessLine" label="Business Line"><Select options={BL_OPTIONS} /></Form.Item>
-        <Form.Item name="serviceType" label="Service Type"><Select options={SERVICE_OPTIONS} /></Form.Item>
         <Row gutter={16}><Col span={12}><Form.Item name="version" label="Version"><InputNumber min={1} style={{ width: '100%' }} /></Form.Item></Col><Col span={12}><Form.Item name="isActive" label="Active" valuePropName="checked"><Switch /></Form.Item></Col></Row>
         <Divider />
         <Form.Item name="baseFee" label={<strong>Base Fee (€)</strong>} rules={[{ required: true }]}><InputNumber min={0} step={0.01} style={{ width: '100%' }} /></Form.Item>

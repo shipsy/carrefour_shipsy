@@ -200,10 +200,14 @@ const stBadge: Record<string, React.CSSProperties> = {
 
 export default function SlotManagement() {
   const [allData] = useState<SlotConfigRecord[]>(() => {
-    const built = buildSeedData();
-    // Sync ALL slot configs to localStorage on mount so checkout reads them
-    built.forEach(rec => syncToCheckout(rec));
-    return built;
+    try {
+      const built = buildSeedData();
+      built.forEach(rec => { try { syncToCheckout(rec); } catch { /* ignore */ } });
+      return built;
+    } catch (e) {
+      console.error('[SlotManagement] Init error:', e);
+      return [];
+    }
   });
   const [configs, setConfigs] = useState<SlotConfigRecord[]>([]);
   const [isLoading] = useState(false);
