@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import {
-  Table, Input, InputNumber, Select, Button, Switch, Tag, Slider, Space,
-  Drawer, Form, Tabs, Modal, Divider, Row, Col, Statistic, Popconfirm,
-  message, Spin, Tooltip,
+  Table, Input, InputNumber, Select, Button, Switch, Tag, Space,
+  Drawer, Form, Tabs, Modal, Divider, Row, Col, Popconfirm,
+  message,
 } from 'antd';
 import {
-  SearchOutlined, DeleteOutlined, EditOutlined, ReloadOutlined,
-  PlusOutlined, CloseOutlined, InfoCircleOutlined, FileAddOutlined,
+  SearchOutlined, DeleteOutlined, EditOutlined,
+  PlusOutlined, CloseOutlined, FileAddOutlined,
   UploadOutlined, DownloadOutlined, InboxOutlined, LeftOutlined, RightOutlined,
 } from '@ant-design/icons';
 import { Dropdown as AntDropdown } from 'antd';
@@ -172,7 +172,7 @@ function makeRecord(store: typeof adminStores[0], bl: string, st: string): Yield
   const rules: PricingRule[] = [
     { priority: 1, name: 'VIP Free Delivery', type: 'exclusive', condition: { type: 'segment', value: 'vip' }, action: { type: 'set_price', value: 0 }, active: true },
     { priority: 2, name: 'Segment Discount', type: 'exclusive', condition: { type: 'segment', value: 'any_non_standard' }, action: { type: 'discount_pct', value: 'from_segment_table' }, active: true },
-    { priority: 3, name: 'Promo Code', type: 'cumulative', condition: { type: 'promo_code', value: 'valid_code_applied' }, action: { type: 'discount_from_promo' }, active: true },
+    { priority: 3, name: 'Promo Code', type: 'cumulative', condition: { type: 'promo_code', value: 'valid_code_applied' }, action: { type: 'discount_from_promo', value: null }, active: true },
   ];
 
   if (p.greenPct > 0) {
@@ -182,7 +182,7 @@ function makeRecord(store: typeof adminStores[0], bl: string, st: string): Yield
   rules.push(
     { priority: 5, name: 'Surge Pricing', type: 'cumulative', condition: { type: 'capacity_above', value: 'from_surge_tiers' }, action: { type: 'surcharge_flat', value: 'from_surge_tiers' }, active: true },
     { priority: 6, name: 'Free Delivery Threshold', type: 'exclusive', condition: { type: 'basket_above', value: 'from_segment_table' }, action: { type: 'set_price', value: 0 }, active: true },
-    { priority: 99, name: 'Floor Price', type: 'exclusive', condition: { type: 'always' }, action: { type: 'enforce_floor', value: vary(p.floor) }, active: true },
+    { priority: 99, name: 'Floor Price', type: 'exclusive', condition: { type: 'always', value: true }, action: { type: 'enforce_floor', value: vary(p.floor) }, active: true },
   );
 
   return {
@@ -373,13 +373,6 @@ function generateSampleCsv(): string {
 
 const typeColors: Record<string, string> = { LAD_Hub: '#6B21A8', Hypermarket: '#004E9A', Market: '#389E0D', Express: '#D46B08' };
 
-const stBadge: Record<string, React.CSSProperties> = {
-  home: { background: '#E6F7FF', color: '#006EC3', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600 },
-  fast: { background: '#FFF7E6', color: '#D46B08', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600 },
-  collect: { background: '#F6FFED', color: '#389E0D', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600 },
-  drive: { background: '#F6FFED', color: '#389E0D', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600 },
-  express: { background: '#FFF7E6', color: '#D46B08', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600 },
-};
 
 // ══════════════════════════════════════════════════════════════
 // MAIN COMPONENT — Sidebar Entity Layout
@@ -725,7 +718,7 @@ function YieldFormDrawer({ visible, editData, storeId, storeName, serviceType, b
       setSurgeTiers([{ capacityAbovePct: 75, amount: 1.0 }, { capacityAbovePct: 85, amount: 2.0 }, { capacityAbovePct: 95, amount: 4.0 }]);
       setSegmentPricing([{ segment: 'standard', discountPct: 0, freeAbove: 200, maxFee: 12.99 }, { segment: 'plus', discountPct: 15, freeAbove: 150, maxFee: 9.99 }, { segment: 'premium', discountPct: 30, freeAbove: 100, maxFee: 7.99 }, { segment: 'vip', discountPct: 100, freeAbove: 0, maxFee: 0 }]);
       setGreenCriteria(['Vehicle already in neighborhood', 'Off-peak window', 'Electric vehicle route']);
-      setRules([{ priority: 1, name: 'VIP Free Delivery', type: 'exclusive', condition: { type: 'segment', value: 'vip' }, action: { type: 'set_price', value: 0 }, active: true }, { priority: 99, name: 'Floor Price', type: 'exclusive', condition: { type: 'always' }, action: { type: 'enforce_floor', value: 1.99 }, active: true }]);
+      setRules([{ priority: 1, name: 'VIP Free Delivery', type: 'exclusive', condition: { type: 'segment', value: 'vip' }, action: { type: 'set_price', value: 0 }, active: true }, { priority: 99, name: 'Floor Price', type: 'exclusive', condition: { type: 'always', value: true }, action: { type: 'enforce_floor', value: 1.99 }, active: true }]);
     }
   }, [visible, editData, form, storeId, storeName, serviceType]);
 

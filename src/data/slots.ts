@@ -523,9 +523,8 @@ function localDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-export function generateSlots(baseDate: Date, daysAhead: number = 5, storeId: string = '4660', deliveryMethod: DeliveryMethodType = 'home'): SlotRaw[] {
+export function generateSlots(baseDate: Date, _daysAhead: number = 5, storeId: string = '4660', deliveryMethod: DeliveryMethodType = 'home'): SlotRaw[] {
   const slots: SlotRaw[] = [];
-  const now = new Date();
 
   // Pick schedule based on delivery method
   let schedule: DaySchedule;
@@ -573,13 +572,8 @@ export function generateSlots(baseDate: Date, daysAhead: number = 5, storeId: st
       const [cutH, cutM] = cutOffTime.split(':').map(Number);
       const cutOffDate = new Date(dateStr);
       cutOffDate.setHours(cutH, cutM, 0, 0);
-      const isPastCutOff = now >= cutOffDate;
 
       // For today's slots: also check if slot start time has already passed
-      const isToday = dateStr === localDateStr(now);
-      const slotStartDate = new Date(dateStr);
-      slotStartDate.setHours(sh, sm, 0, 0);
-      const isSlotPassed = isToday && now >= slotStartDate;
 
       // Green = afternoon slot within first 3 days
       const isGreen =

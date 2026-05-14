@@ -248,20 +248,11 @@ export default function AdminConsole() {
   const curGrp = nav.find(g => g.key === grp);
   const tabs = curGrp?.children || [];
 
-  const profileMenu = (
-    <div style={{ background: C.navbar, borderRadius: 6, padding: '6px 0', minWidth: 200, boxShadow: '0 8px 24px rgba(0,0,0,0.25)' }}>
-      <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <Avatar size={28} style={{ background: C.primary, fontWeight: 700, fontSize: 11 }}>N</Avatar>
-        <div><div style={{ color: '#fff', fontSize: 12, fontWeight: 600 }}>Naval Ojha</div><div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>naval.ojjha@shipsy.io</div></div>
-      </div>
-      {[{ i: <SwapOutlined />, l: 'Switch View', action: () => {} }, { i: <ReloadOutlined />, l: 'Reset Password', action: () => {} }, { i: <LogoutOutlined />, l: 'Logout', action: () => { sessionStorage.removeItem('shipsy_admin_auth'); sessionStorage.removeItem('shipsy_admin_user'); setAuthed(false); } }].map(x => (
-        <div key={x.l} onClick={x.action} style={{ padding: '7px 14px', display: 'flex', alignItems: 'center', gap: 8, color: '#fff', fontSize: 12, cursor: 'pointer', fontFamily: C.font }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
-        >{x.i} {x.l}</div>
-      ))}
-    </div>
-  );
+  const profileMenuItems = [
+    { key: 'switch', icon: <SwapOutlined />, label: 'Switch View', onClick: () => {} },
+    { key: 'password', icon: <ReloadOutlined />, label: 'Reset Password', onClick: () => {} },
+    { key: 'logout', icon: <LogoutOutlined />, label: 'Logout', onClick: () => { sessionStorage.removeItem('shipsy_admin_auth'); sessionStorage.removeItem('shipsy_admin_user'); setAuthed(false); } },
+  ];
 
   return (
     <div style={{ fontFamily: C.font, minHeight: '100vh', background: C.pageBg }}>
@@ -283,7 +274,7 @@ export default function AdminConsole() {
           <AntBadge count={99} overflowCount={99} size="small" offset={[-2, 2]}>
             <BellOutlined style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', cursor: 'pointer' }} />
           </AntBadge>
-          <Dropdown overlay={profileMenu} trigger={['click']} placement="bottomRight">
+          <Dropdown menu={{items: profileMenuItems}} trigger={['click']} placement="bottomRight">
             <Avatar size={26} style={{ background: C.primary, cursor: 'pointer', fontWeight: 700, fontSize: 11, marginLeft: 4 }}>N</Avatar>
           </Dropdown>
         </div>

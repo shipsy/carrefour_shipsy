@@ -126,7 +126,7 @@ function generateSlotsFromZoneData(
   zone: string,
   schedule: Record<string, { startTime: string; endTime: string; capacity: number }[]>,
   config: SlotConfig,
-  now: Date,
+  _now: Date,
   deliveryMethod: DeliveryMethod = 'home',
 ): SlotRaw[] {
   const slots: SlotRaw[] = [];
@@ -145,7 +145,6 @@ function generateSlotsFromZoneData(
     if (!daySlots) continue;
 
     const dateStr = localDateStr(date);
-    const isToday = d === 0;
 
     daySlots.forEach((zs, idx) => {
       const capacityTotal = config.capacityPerSlot && config.capacityPerSlot !== 40
@@ -169,12 +168,8 @@ function generateSlotsFromZoneData(
       const [cutH, cutM] = cutOffTime.split(':').map(Number);
       const cutOffDate = new Date(dateStr);
       cutOffDate.setHours(cutH, cutM, 0, 0);
-      const isPastCutOff = now >= cutOffDate;
 
       // Real-time: slot start already passed today
-      const slotStartDate = new Date(dateStr);
-      slotStartDate.setHours(sh, sm, 0, 0);
-      const isSlotPassed = isToday && now >= slotStartDate;
 
       const tod = getTimeOfDay(zs.startTime);
       const isGreen = !isFridayClosed && tod === 'afternoon' && d <= 3 && d > 0 && pseudo > 0.5;

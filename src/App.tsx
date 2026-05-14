@@ -25,21 +25,6 @@ import AdminConsole from './admin/AdminConsole';
 
 // ── Hash-based router ───────────────────────────────────────
 
-function useHashRoute() {
-  const getHash = () => window.location.hash.replace(/^#\/?/, '').toLowerCase();
-  const [hash, setHash] = useState(getHash);
-  useEffect(() => {
-    const onHash = () => setHash(getHash());
-    window.addEventListener('hashchange', onHash);
-    // Also re-check on popstate for browser back/forward
-    window.addEventListener('popstate', onHash);
-    return () => {
-      window.removeEventListener('hashchange', onHash);
-      window.removeEventListener('popstate', onHash);
-    };
-  }, []);
-  return hash;
-}
 
 // ── Clear stale yield configs on fresh load ──────────────────
 (function purgeStaleYield() {

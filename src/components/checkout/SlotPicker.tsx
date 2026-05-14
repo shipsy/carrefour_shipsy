@@ -88,17 +88,6 @@ export default function SlotPicker({
     return filtered;
   }, [slots, selectedDate, selectedTod, shipsyEnabled]);
 
-  // Fee range for the selected date (only when Shipsy is on)
-  const feeRange = useMemo(() => {
-    if (!shipsyEnabled) return null;
-    const daySlots = slots.filter((s) => s.date === selectedDate);
-    const fees = daySlots
-      .map((s) => yieldResults.get(s.id))
-      .filter(Boolean)
-      .map((yr) => yr!.finalFee);
-    if (fees.length === 0) return null;
-    return { min: Math.min(...fees), max: Math.max(...fees) };
-  }, [shipsyEnabled, slots, selectedDate, yieldResults]);
 
   return (
     <div>
